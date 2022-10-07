@@ -25,7 +25,7 @@ private:
     // Hash function 
     struct hashFunction
     {
-        size_t operator()(const std::pair<int, int> &x) const
+        size_t operator()(const std::pair<int64_t, int64_t> &x) const
         {
             return x.first ^ x.second;
         }
