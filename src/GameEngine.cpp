@@ -37,6 +37,7 @@ void GameEngine::PrintPieces()
     std::system("clear");
     std::cout << "\tCurrent Game Pieces" << std::endl;
     std::cout << "\t==========================================" << std::endl;
+
     for (auto &p : m_pieces)
         std::cout << "\tx: " << p.first << "\t"
                   << "y: " << p.second << std::endl;
