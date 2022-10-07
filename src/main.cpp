@@ -1,6 +1,3 @@
-#include <iostream>
-#include <chrono>
-#include <thread>
 #include "GameEngine.hpp"
 
 int main()

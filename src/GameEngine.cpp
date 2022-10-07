@@ -1,7 +1,7 @@
 #include "GameEngine.hpp"
 #include <iostream>
 
-void GameEngine::Menu()
+void GameEngine::Menu() const
 {
     std::cout << "\t================MAIN MENU================\t" << std::endl;
     std::cout << "\t0. End Game" << std::endl;
@@ -25,6 +25,7 @@ void GameEngine::Input()
     {
         std::cerr << "BAD MENU OPTION" << std::endl;
         std::cerr << "Try Again" << std::endl;
+        return;
     }
 
     it->second();
@@ -47,12 +48,16 @@ void GameEngine::PrintPieces()
 
 void GameEngine::InputPiece()
 {
-    uint64_t x = 0;
-    uint64_t y = 0;
+    int64_t x = 0;
+    int64_t y = 0;
     std::cout << "Input two integers delimted by a space" << std::endl;
     std::cout << "X Value: ";
     std::cin >> x;
     std::cout << "Y Value: ";
     std::cin >> y;
     m_pieces.insert({x, y});
+};
+
+void GameEngine::ClearPieces(){
+    m_pieces.clear();
 };

@@ -10,16 +10,15 @@
 enum class MenuInput{
     End = 0,
     InputPiece = 1,
-    PrintPieces = 2 
+    PrintPieces = 2,
+    ClearPieces = 3,
 };
 
 class GameEngine
 {
 public:
-    void Menu();
+    void Menu() const;
     void Input();
-
-    inline void End(){ m_end = true; }
     inline bool IsOver()const{ return m_end; };
 
 private:
@@ -27,6 +26,7 @@ private:
 
     void InputPiece();
     void PrintPieces();
+    void ClearPieces();
 
     int m_userInput;
     bool m_end = false;
@@ -35,6 +35,7 @@ private:
     std::unordered_map<MenuInput, std::function<void()>> m_menuOptions{
         {MenuInput::InputPiece, [&](){InputPiece();}},
         {MenuInput::PrintPieces, [&](){PrintPieces();}},
+        {MenuInput::ClearPieces, [&](){ClearPieces();}},
         {MenuInput::End, [&](){m_end = true;}}
     };
 };
