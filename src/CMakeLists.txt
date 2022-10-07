@@ -1,5 +1,5 @@
 set(GAME_OF_LIFE_SRCS
-    GameBoard.cpp
+    GameEngine.cpp
 )
 
 set(MAIN_SRCS

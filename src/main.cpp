@@ -1,14 +1,14 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
-#include "GameBoard.hpp"
+#include "GameEngine.hpp"
 
 int main()
 {
-  GameBoard game;
+  GameEngine game;
 
   while(!game.IsOver()){
     game.Menu();
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+    game.Input();
   }
 }
