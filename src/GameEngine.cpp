@@ -39,8 +39,8 @@ void GameEngine::PrintPieces()
     std::cout << "\t==========================================" << std::endl;
 
     for (auto &p : m_pieces)
-        std::cout << "\tx: " << p.first << "\t"
-                  << "y: " << p.second << std::endl;
+        std::cout << "\tx: " << p.first.first << "\t"
+                  << "y: " << p.first.second << "State: " << ((p.second) ? "Alive" : "Dead") << std::endl;
 
     std::cout << "\npress any button to continue" << std::endl;
     uint8_t x = 0;
@@ -51,12 +51,15 @@ void GameEngine::InputPiece()
 {
     int64_t x = 0;
     int64_t y = 0;
+    int state = 0;
     std::cout << "Input two integers delimted by a space" << std::endl;
     std::cout << "X Value: ";
     std::cin >> x;
     std::cout << "Y Value: ";
     std::cin >> y;
-    m_pieces.insert({x, y});
+    std::cout << "Alive (1) or False(0): ";
+    std::cin >> state;
+    m_pieces.insert({{x, y}, state});
 };
 
 void GameEngine::ClearPieces(){
@@ -64,7 +67,9 @@ void GameEngine::ClearPieces(){
 };
 
 void GameEngine::RunSim(){
-    std::cout << "RUNNING SIM" << std::endl;
+    for(int x=0;x<10;x++){
+        
+    }
     uint8_t x = 0;
     std::cin >> x;
 };

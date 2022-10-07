@@ -6,7 +6,6 @@
 #include <cstddef>
 #include <iostream>
 
-
 enum class MenuInput{
     End = 0,
     InputPiece = 1,
@@ -23,7 +22,15 @@ public:
     inline bool IsOver()const{ return m_end; };
 
 private:
-    using GameBoard = std::unordered_map<int64_t, int64_t>;
+    // Hash function 
+    struct hashFunction
+    {
+        size_t operator()(const std::pair<int, int> &x) const
+        {
+            return x.first ^ x.second;
+        }
+    };
+    using GameBoard = std::unordered_map<std::pair<int64_t, int64_t>, bool, hashFunction>;
 
     void InputPiece();
     void PrintPieces();
