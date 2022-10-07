@@ -12,6 +12,7 @@ enum class MenuInput{
     PrintPieces = 2,
     ClearPieces = 3,
     RunSim = 4,
+    ReadConfig = 5,
 };
 
 class GameEngine
@@ -30,8 +31,11 @@ private:
             return x.first ^ x.second;
         }
     };
-    using GameBoard = std::unordered_map<std::pair<int64_t, int64_t>, bool, hashFunction>;
+    using Piece = std::pair<int64_t, int64_t>;
+    using GameBoard = std::unordered_map<Piece, bool, hashFunction>;
 
+    void ReadFiles();
+    void Epoch(Piece p);
     void InputPiece();
     void PrintPieces();
     void ClearPieces();
@@ -46,6 +50,7 @@ private:
         {MenuInput::PrintPieces, [&](){PrintPieces();}},
         {MenuInput::ClearPieces, [&](){ClearPieces();}},
         {MenuInput::RunSim, [&](){RunSim();}},
-        {MenuInput::End, [&](){m_end = true;}}
+        {MenuInput::End, [&](){m_end = true;}},
+        {MenuInput::ReadConfig, [&](){ReadFiles();}}
     };
 };
