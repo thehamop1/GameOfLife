@@ -12,6 +12,7 @@ enum class MenuInput{
     InputPiece = 1,
     PrintPieces = 2,
     ClearPieces = 3,
+    RunSim = 4,
 };
 
 class GameEngine
@@ -27,6 +28,7 @@ private:
     void InputPiece();
     void PrintPieces();
     void ClearPieces();
+    void RunSim();
 
     int m_userInput;
     bool m_end = false;
@@ -36,6 +38,7 @@ private:
         {MenuInput::InputPiece, [&](){InputPiece();}},
         {MenuInput::PrintPieces, [&](){PrintPieces();}},
         {MenuInput::ClearPieces, [&](){ClearPieces();}},
+        {MenuInput::RunSim, [&](){RunSim();}},
         {MenuInput::End, [&](){m_end = true;}}
     };
 };

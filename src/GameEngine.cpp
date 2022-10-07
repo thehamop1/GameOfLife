@@ -62,3 +62,9 @@ void GameEngine::InputPiece()
 void GameEngine::ClearPieces(){
     m_pieces.clear();
 };
+
+void GameEngine::RunSim(){
+    std::cout << "RUNNING SIM" << std::endl;
+    uint8_t x = 0;
+    std::cin >> x;
+};
