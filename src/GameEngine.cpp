@@ -75,19 +75,16 @@ void GameEngine::RunSim()
 {
     for (int x = 0; x < 10; x++)
     {
-        std::shared_ptr<std::unordered_set<GameEngine::Piece, GameEngine::hashFunction>> epochChecks = GetEpochPieces();
-        for (auto &piece : m_pieces)
-        {
-            Epoch(piece);
-        }
+        std::shared_ptr<GameEngine::GameBoard> epochChecks = GetEpochPieces();
+        Epoch(epochChecks);
         break;
     }
     uint8_t x = 0;
     std::cin >> x;
 };
 
-std::shared_ptr<std::unordered_set<GameEngine::Piece, GameEngine::hashFunction>> GameEngine::GetEpochPieces(){
-    auto set = std::make_shared<std::unordered_set<GameEngine::Piece, GameEngine::hashFunction>>();
+std::shared_ptr<GameEngine::GameBoard> GameEngine::GetEpochPieces(){
+    auto set = std::make_shared<GameEngine::GameBoard>();
     for (auto &piece : m_pieces)
     {
         for(auto& n : m_nieghbors){
@@ -122,25 +119,27 @@ size_t GameEngine::CheckNeighbors(const Piece& p) const{
 //  (-1, 1), (0, 1), (1, 1)
 //  (-1, 0), (0, 0), (1, 0)
 //  (-1, -1), (0, -1), (1, -1)
-void GameEngine::Epoch(Piece p)
+void GameEngine::Epoch(std::shared_ptr<GameBoard> pieces)
 {
-    //get 9 points
+    std::unordered_set<Piece, GameEngine::hashFunction> addSet;
+    std::unordered_set<Piece, GameEngine::hashFunction> removeSet;
+
     //check each point neighbor hit
     //add actions to data structure
     //after all computations update the board
-    for(auto& n : m_nieghbors){
-        Piece newPiece{(p.first + n.first), (p.second + n.second)};
-        size_t touching = CheckNeighbors(newPiece);
-        if (touching < 2 || touching > 3)
-        {
-            std::cout << "\tDIE \tX: " << newPiece.first << "\tY: " << newPiece.second << "\tTouching: " << touching;
+    for(auto& p : *pieces){
+        size_t touching = CheckNeighbors(p);
+        if (touching < 2 || touching > 3){
+            removeSet.insert(p);
+        }else{
+            addSet.insert(p);
         }
-        else
-        {
-            std::cout << "\tALIVE \tX: " << newPiece.first << "\tY: " << newPiece.second << "\tTouching: " << touching;
-        }
-        std::cout << std::endl;
     }
+
+    for(auto& r : removeSet){
+        
+    }
+
 };
 
 void GameEngine::ReadFiles()
