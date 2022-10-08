@@ -76,6 +76,12 @@ void GameEngine::RunSim()
     for (int x = 0; x < 10; x++)
     {
         std::shared_ptr<GameEngine::GameBoard> epochChecks = GetEpochPieces();
+        // for(auto l : *epochChecks){
+        //     std::cout << l.first << "\t" << l.second << std::endl;
+        // }
+        // std::cout << "SIZE: " << epochChecks->size();
+        // int y=0;
+        // std::cin >> y;
         Epoch(epochChecks);
     }
 };
@@ -126,10 +132,14 @@ void GameEngine::Epoch(std::shared_ptr<GameBoard> pieces)
     //after all computations update the board
     for(auto& p : *pieces){
         size_t touching = CheckNeighbors(p);
-        if (touching < 2 || touching > 3){
-            removeSet.insert(p);
+        if(m_pieces.find(p) != m_pieces.end()){//If piece is alive
+            if (touching != 3 || touching != 2){
+                removeSet.insert(p);
+            }
         }else{
-            addSet.insert(p);
+            if(touching==3){
+                addSet.insert(p);
+            }
         }
     }
 
@@ -138,7 +148,7 @@ void GameEngine::Epoch(std::shared_ptr<GameBoard> pieces)
     }
 
     for(auto& a : addSet){
-        m_pieces.erase(a);
+        m_pieces.insert(a);
     }
 
 };
