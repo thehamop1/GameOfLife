@@ -1,6 +1,7 @@
 #include "GameEngine.hpp"
 #include <iostream>
 #include <filesystem>
+#include <fstream>
 #include <sstream>
 #include <string>
 
@@ -43,8 +44,7 @@ void GameEngine::PrintPieces()
     std::cout << "\t==========================================" << std::endl;
 
     for (auto &p : m_pieces)
-        std::cout << "\tx: " << p.first.first << "\t"
-                  << "y: " << p.first.second << "State: " << ((p.second) ? "Alive" : "Dead") << std::endl;
+        std::cout << "\tx: " << p.first << "\t" << "y: " << p.second << std::endl;
 
     std::cout << "\npress any button to continue" << std::endl;
     uint8_t x = 0;
@@ -57,13 +57,13 @@ void GameEngine::InputPiece()
     int64_t y = 0;
     int state = 0;
     std::cout << "Input two integers delimted by a space" << std::endl;
-    std::cout << "X Value: ";
+    std::cout << "\tX Value: ";
     std::cin >> x;
-    std::cout << "Y Value: ";
+    std::cout << "\tY Value: ";
     std::cin >> y;
-    std::cout << "Alive (1) or False(0): ";
+    std::cout << "\tAlive (1) or False(0): ";
     std::cin >> state;
-    m_pieces.insert({{x, y}, state});
+    m_pieces.insert({x, y});
 };
 
 void GameEngine::ClearPieces()
@@ -75,9 +75,10 @@ void GameEngine::RunSim()
 {
     for (int x = 0; x < 10; x++)
     {
+        std::shared_ptr<std::unordered_set<GameEngine::Piece, GameEngine::hashFunction>> epochChecks = GetEpochPieces();
         for (auto &piece : m_pieces)
         {
-            Epoch(piece.first);
+            Epoch(piece);
         }
         break;
     }
@@ -85,13 +86,19 @@ void GameEngine::RunSim()
     std::cin >> x;
 };
 
-// Get surrounding values
-//  (-1, 1), (0, 1), (1, 1)
-//  (-1, 0), (0, 0), (1, 0)
-//  (-1, -1), (0, -1), (1, -1)
-void GameEngine::Epoch(Piece p)
-{
-    int touching = 0;
+std::shared_ptr<std::unordered_set<GameEngine::Piece, GameEngine::hashFunction>> GameEngine::GetEpochPieces(){
+    auto set = std::make_shared<std::unordered_set<GameEngine::Piece, GameEngine::hashFunction>>();
+    for (auto &piece : m_pieces)
+    {
+        for(auto& n : m_nieghbors){
+            set->insert({(piece.first + n.first), (piece.second + n.second)});
+        }
+    }
+    return set;
+};
+
+size_t GameEngine::CheckNeighbors(const Piece& p) const{
+    size_t touching = 0;
     if (m_pieces.find({p.first - 1, p.second + 1}) != m_pieces.end())
         touching++;
     if (m_pieces.find({p.first, p.second + 1}) != m_pieces.end())
@@ -108,13 +115,31 @@ void GameEngine::Epoch(Piece p)
         touching++;
     if (m_pieces.find({p.first + 1, p.second - 1}) != m_pieces.end())
         touching++;
-    if (touching < 2 || touching > 3)
-    {
-        std::cout << " DIE X: " << p.first << " Y: " << p.second << " Touching: " << touching;
-    }
-    else
-    {
-        std::cout << " ALIVE X: " << p.first << " Y: " << p.second << " Touching: " << touching;
+    return touching;
+};
+
+// Get surrounding values
+//  (-1, 1), (0, 1), (1, 1)
+//  (-1, 0), (0, 0), (1, 0)
+//  (-1, -1), (0, -1), (1, -1)
+void GameEngine::Epoch(Piece p)
+{
+    //get 9 points
+    //check each point neighbor hit
+    //add actions to data structure
+    //after all computations update the board
+    for(auto& n : m_nieghbors){
+        Piece newPiece{(p.first + n.first), (p.second + n.second)};
+        size_t touching = CheckNeighbors(newPiece);
+        if (touching < 2 || touching > 3)
+        {
+            std::cout << "\tDIE \tX: " << newPiece.first << "\tY: " << newPiece.second << "\tTouching: " << touching;
+        }
+        else
+        {
+            std::cout << "\tALIVE \tX: " << newPiece.first << "\tY: " << newPiece.second << "\tTouching: " << touching;
+        }
+        std::cout << std::endl;
     }
 };
 
@@ -131,7 +156,8 @@ void GameEngine::ReadFiles()
     }
     std::cout << std::endl;
 
-    int choice = 0;
+    size_t choice = 0;
+    std::cin >> choice;
     if((choice<0) && (choice>configFiles.size())){
         std::cerr << "Bad File Choice!" << std::endl;
         std::cin >> x;
@@ -144,10 +170,8 @@ void GameEngine::ReadFiles()
     while (std::getline(file, line))
     {
         std::istringstream iss(line);
-        int a, b;
-        if (!(iss >> a >> b)) { break; } // error
-
-        // process pair (a,b)
+        int64_t x, y;
+        if (!(iss >> x >> y)) { break; }
+        m_pieces.insert({x, y});
     }
-    std::cin >> x;
 };

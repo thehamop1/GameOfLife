@@ -4,16 +4,8 @@
 #include <utility>
 #include <functional>
 #include <cstddef>
+#include <memory>
 #include <iostream>
-
-enum class MenuInput{
-    End = 0,
-    InputPiece = 1,
-    PrintPieces = 2,
-    ClearPieces = 3,
-    RunSim = 4,
-    ReadConfig = 5,
-};
 
 class GameEngine
 {
@@ -23,6 +15,14 @@ public:
     inline bool IsOver()const{ return m_end; };
 
 private:
+    enum class MenuInput{
+        End = 0,
+        InputPiece = 1,
+        PrintPieces = 2,
+        ClearPieces = 3,
+        RunSim = 4,
+        ReadConfig = 5,
+    };
     // Hash function 
     struct hashFunction
     {
@@ -32,18 +32,30 @@ private:
         }
     };
     using Piece = std::pair<int64_t, int64_t>;
-    using GameBoard = std::unordered_map<Piece, bool, hashFunction>;
+    using GameBoard = std::unordered_set<Piece, hashFunction>;
 
+    size_t CheckNeighbors(const Piece& p)const;
     void ReadFiles();
     void Epoch(Piece p);
     void InputPiece();
     void PrintPieces();
     void ClearPieces();
     void RunSim();
-
+    std::shared_ptr<std::unordered_set<Piece, hashFunction>> GetEpochPieces();
     int m_userInput;
     bool m_end = false;
     GameBoard m_pieces;
+
+    constexpr static std::array<std::pair<int64_t, int64_t>, 9> m_nieghbors = {{
+        {-1, 1},
+        {0, 1},
+        {0, 0},
+        {1, 1},
+        {-1, 0},
+        {-1, -1},
+        {0, -1},
+        {1, -1}
+    }};
 
     std::unordered_map<MenuInput, std::function<void()>> m_menuOptions{
         {MenuInput::InputPiece, [&](){InputPiece();}},
