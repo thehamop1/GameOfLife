@@ -133,7 +133,7 @@ void GameEngine::Epoch(std::shared_ptr<GameBoard> pieces)
     for(auto& p : *pieces){
         size_t touching = CheckNeighbors(p);
         if(m_pieces.find(p) != m_pieces.end()){//If piece is alive
-            if (touching != 3 || touching != 2){
+            if (touching != 3 && touching != 2){
                 removeSet.insert(p);
             }
         }else{
