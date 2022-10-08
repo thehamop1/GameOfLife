@@ -49,9 +49,10 @@ private:
     constexpr static std::array<std::pair<int64_t, int64_t>, 9> m_nieghbors = {{
         {-1, 1},
         {0, 1},
-        {0, 0},
         {1, 1},
         {-1, 0},
+        {0, 0},
+        {1, 0},
         {-1, -1},
         {0, -1},
         {1, -1}
