@@ -1,9 +1,11 @@
 #include "GameEngine.hpp"
 #include <iostream>
+#include <future>
 #include <filesystem>
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <mutex>
 
 void GameEngine::Menu() const
 {
@@ -44,7 +46,8 @@ void GameEngine::PrintPieces()
     std::cout << "\t==========================================" << std::endl;
 
     for (auto &p : m_pieces)
-        std::cout << "\tx: " << p.first << "\t" << "y: " << p.second << std::endl;
+        std::cout << "\tx: " << p.first << "\t"
+                  << "y: " << p.second << std::endl;
 
     std::cout << "\npress any button to continue" << std::endl;
     uint8_t x = 0;
@@ -73,31 +76,28 @@ void GameEngine::ClearPieces()
 
 void GameEngine::RunSim()
 {
-    for (int x = 0; x < 10; x++)
+    for (uint64_t x = 0; x < 10000000; x++)
     {
         std::shared_ptr<GameEngine::GameBoard> epochChecks = GetEpochPieces();
-        // for(auto l : *epochChecks){
-        //     std::cout << l.first << "\t" << l.second << std::endl;
-        // }
-        // std::cout << "SIZE: " << epochChecks->size();
-        // int y=0;
-        // std::cin >> y;
         Epoch(epochChecks);
     }
 };
 
-std::shared_ptr<GameEngine::GameBoard> GameEngine::GetEpochPieces(){
+std::shared_ptr<GameEngine::GameBoard> GameEngine::GetEpochPieces()
+{
     auto set = std::make_shared<GameEngine::GameBoard>();
     for (auto &piece : m_pieces)
     {
-        for(auto& n : m_nieghbors){
+        for (auto &n : m_nieghbors)
+        {
             set->insert({(piece.first + n.first), (piece.second + n.second)});
         }
     }
     return set;
 };
 
-size_t GameEngine::CheckNeighbors(const Piece& p) const{
+size_t GameEngine::CheckNeighbors(const Piece &p) const
+{
     size_t touching = 0;
     if (m_pieces.find({p.first - 1, p.second + 1}) != m_pieces.end())
         touching++;
@@ -124,33 +124,54 @@ size_t GameEngine::CheckNeighbors(const Piece& p) const{
 //  (-1, -1), (0, -1), (1, -1)
 void GameEngine::Epoch(std::shared_ptr<GameBoard> pieces)
 {
-    std::unordered_set<Piece, GameEngine::hashFunction> addSet;
-    std::unordered_set<Piece, GameEngine::hashFunction> removeSet;
+    // std::mutex addLock, removeLock;
+    // std::unordered_set<Piece, GameEngine::hashFunction> addSet;
+    // std::unordered_set<Piece, GameEngine::hashFunction> removeSet;
 
-    //check each point neighbor hit
-    //add actions to data structure
-    //after all computations update the board
-    for(auto& p : *pieces){
-        size_t touching = CheckNeighbors(p);
-        if(m_pieces.find(p) != m_pieces.end()){//If piece is alive
-            if (touching != 3 && touching != 2){
-                removeSet.insert(p);
-            }
-        }else{
-            if(touching==3){
-                addSet.insert(p);
-            }
-        }
+    // check each point neighbor hit
+    // add actions to data structure
+    // after all computations update the board
+    std::vector<std::future<std::pair<std::vector<Piece>, std::vector<Piece>>, GameEngine::hashFunction>>> checks;
+
+    for (auto p : *pieces)
+    {
+        checks.push_back(std::async(std::launch::async,
+                                    [&, p]()
+                                    {
+                                        std::pair<std::vector<Piece>, std::vector<Piece>>
+                                        size_t touching = CheckNeighbors(p);
+                                        if (m_pieces.find(p) != m_pieces.end())
+                                        { // If piece is alive
+                                            if (touching != 3 && touching != 2)
+                                            {
+                                                std::scoped_lock<std::mutex> lock(removeLock);
+                                                removeSet.insert(p);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (touching == 3)
+                                            {
+                                                std::scoped_lock<std::mutex> lock(addLock);
+                                                addSet.insert(p);
+                                            }
+                                        }
+                                    }));
     }
 
-    for(auto& r : removeSet){
+    for (auto &f : checks){
+        f.wait();
+    }
+
+    for (auto &r : removeSet)
+    {
         m_pieces.erase(r);
     }
 
-    for(auto& a : addSet){
+    for (auto &a : addSet)
+    {
         m_pieces.insert(a);
     }
-
 };
 
 void GameEngine::ReadFiles()
@@ -168,7 +189,8 @@ void GameEngine::ReadFiles()
 
     size_t choice = 0;
     std::cin >> choice;
-    if((choice<0) && (choice>configFiles.size())){
+    if ((choice < 0) && (choice > configFiles.size()))
+    {
         std::cerr << "Bad File Choice!" << std::endl;
         std::cin >> x;
         return;
@@ -181,7 +203,10 @@ void GameEngine::ReadFiles()
     {
         std::istringstream iss(line);
         int64_t x, y;
-        if (!(iss >> x >> y)) { break; }
+        if (!(iss >> x >> y))
+        {
+            break;
+        }
         m_pieces.insert({x, y});
     }
 };

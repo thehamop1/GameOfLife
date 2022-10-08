@@ -1,0 +1,349 @@
+events: Hits
+
+fl=??
+fn=(1) std::_Hashtable::_M_rehash
+cfl=??
+cfn=(2) __nss_database_lookup
+calls=8 0
+0 8
+
+fl=??
+fn=(3) __libc_malloc
+cfl=??
+cfn=(4) pthread_attr_setschedparam
+calls=127 0
+0 127
+
+fl=??
+fn=(5) GameEngine::RunSim
+cfl=??
+cfn=(6) GameEngine::Epoch
+calls=3224 0
+0 3224
+
+fl=??
+fn=(7) operator
+0 26
+
+fl=??
+fn=(6)
+cfl=(1) GameEngine.cpp
+cfn=(8) std::_Hashtable::_M_insert [clone .isra.0]
+calls=240 0
+0 240
+
+fl=??
+fn=(2)
+0 30
+
+fl=??
+fn=(9) GameEngine::GetEpochPieces
+cfl=??
+cfn=(10) operator new
+calls=267 0
+0 267
+
+fl=??
+fn=(11) std::__detail::_Prime_rehash_policy::_M_need_rehash
+cfl=??
+cfn=(12) std::__detail::_Prime_rehash_policy::_M_next_bkt
+calls=82 0
+0 82
+
+fl=??
+fn=(1)
+0 241
+
+fl=??
+fn=(13) std::_Sp_counted_ptr_inplace::_M_destroy
+0 1
+
+fl=??
+fn=(6)
+0 411
+
+fl=??
+fn=(6)
+cfl=??
+cfn=(14) GameEngine::CheckNeighbors
+calls=2438 0
+0 2438
+
+fl=??
+fn=(5)
+cfl=??
+cfn=(13)
+calls=1 0
+0 1
+
+fl=??
+fn=(7)
+0 11
+
+fl=??
+fn=(5)
+0 19
+
+fl=??
+fn=(15) std::_Sp_counted_ptr_inplace::_M_dispose
+cfl=??
+cfn=(2)
+calls=11 0
+0 11
+
+fl=??
+fn=(15)
+cfl=??
+cfn=(4)
+calls=280 0
+0 280
+
+fl=??
+fn=(9)
+cfl=??
+cfn=(16) _init
+calls=7 0
+0 7
+
+fl=??
+fn=(11)
+0 89
+
+fl=??
+fn=(1)
+cfl=??
+cfn=(10)
+calls=16 0
+0 16
+
+fl=??
+fn=(5)
+cfl=??
+cfn=(17) cfree
+calls=13 0
+0 13
+
+fl=??
+fn=(16)
+0 47
+
+fl=??
+fn=(5)
+cfl=??
+cfn=(15)
+calls=419 0
+0 419
+
+fl=??
+fn=(6)
+cfl=??
+cfn=(16)
+calls=1 0
+0 1
+
+fl=??
+fn=(18) std::_Hashtable::_M_insert_unique_node
+cfl=??
+cfn=(1)
+calls=280 0
+0 280
+
+fl=??
+fn=(7)
+0 285
+
+fl=??
+fn=(15)
+cfl=??
+cfn=(16)
+calls=12 0
+0 12
+
+fl=??
+fn=(9)
+cfl=??
+cfn=(18)
+calls=517 0
+0 517
+
+fl=??
+fn=(17)
+0 128
+
+fl=??
+fn=(6)
+cfl=??
+cfn=(17)
+calls=35 0
+0 35
+
+fl=??
+fn=(15)
+cfl=??
+cfn=(19) operator delete
+calls=17 0
+0 17
+
+fl=??
+fn=(5)
+cfl=??
+cfn=(9)
+calls=1795 0
+0 1795
+
+fl=??
+fn=(14)
+0 2438
+
+fl=??
+fn=(18)
+cfl=??
+cfn=(16)
+calls=12 0
+0 12
+
+fl=??
+fn=(6)
+cfl=??
+cfn=(4)
+calls=82 0
+0 82
+
+fl=??
+fn=(1)
+cfl=??
+cfn=(4)
+calls=8 0
+0 8
+
+fl=??
+fn=(1)
+cfl=??
+cfn=(17)
+calls=4 0
+0 4
+
+fl=??
+fn=(1)
+cfl=??
+cfn=(16)
+calls=2 0
+0 2
+
+fl=??
+fn=(20) __libc_start_main
+cfl=??
+cfn=(21) main
+calls=5492 0
+0 5492
+
+fl=??
+fn=(12)
+0 82
+
+fl=??
+fn=(9)
+0 1004
+
+fl=??
+fn=(18)
+cfl=??
+cfn=(11)
+calls=171 0
+0 171
+
+fl=??
+fn=(5)
+cfl=??
+cfn=(19)
+calls=2 0
+0 2
+
+fl=??
+fn=(6)
+cfl=??
+cfn=(19)
+calls=6 0
+0 6
+
+fl=??
+fn=(21)
+cfl=??
+cfn=(22) GameEngine::Input
+calls=5492 0
+0 5492
+
+fl=??
+fn=(5)
+cfl=??
+cfn=(16)
+calls=2 0
+0 2
+
+fl=??
+fn=(18)
+0 185
+
+fl=??
+fn=(3)
+0 158
+
+fl=??
+fn=(6)
+cfl=??
+cfn=(2)
+calls=11 0
+0 11
+
+fl=??
+fn=(5)
+cfl=??
+cfn=(4)
+calls=17 0
+0 17
+
+fl=??
+fn=(7)
+0 41
+
+fl=??
+fn=(4)
+0 514
+
+fl=??
+fn=(1)
+cfl=??
+cfn=(19)
+calls=1 0
+0 1
+
+fl=??
+fn=(15)
+0 23
+
+fl=??
+fn=(15)
+cfl=??
+cfn=(17)
+calls=76 0
+0 76
+
+fl=??
+fn=(22)
+cfl=??
+cfn=(5)
+calls=5492 0
+0 5492
+
+fl=(1)
+fn=(23) std::_Hashtable::_M_insert
+0 131
+
+fl=(1)
+fn=(23)
+0 54
+
+fl=(1)
+fn=(23)
+0 55
+
