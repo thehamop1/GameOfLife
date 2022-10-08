@@ -77,10 +77,7 @@ void GameEngine::RunSim()
     {
         std::shared_ptr<GameEngine::GameBoard> epochChecks = GetEpochPieces();
         Epoch(epochChecks);
-        break;
     }
-    uint8_t x = 0;
-    std::cin >> x;
 };
 
 std::shared_ptr<GameEngine::GameBoard> GameEngine::GetEpochPieces(){
@@ -137,7 +134,11 @@ void GameEngine::Epoch(std::shared_ptr<GameBoard> pieces)
     }
 
     for(auto& r : removeSet){
-        
+        m_pieces.erase(r);
+    }
+
+    for(auto& a : addSet){
+        m_pieces.erase(a);
     }
 
 };

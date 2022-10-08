@@ -36,12 +36,12 @@ private:
 
     size_t CheckNeighbors(const Piece& p)const;
     void ReadFiles();
-    void Epoch(Piece p);
+    void Epoch(std::shared_ptr<GameBoard> pieces);
     void InputPiece();
     void PrintPieces();
     void ClearPieces();
     void RunSim();
-    std::shared_ptr<std::unordered_set<Piece, hashFunction>> GetEpochPieces();
+    std::shared_ptr<GameBoard> GetEpochPieces();
     int m_userInput;
     bool m_end = false;
     GameBoard m_pieces;
