@@ -34,16 +34,17 @@ private:
     using Piece = std::pair<int64_t, int64_t>;
     using GameBoard = std::unordered_set<Piece, hashFunction>;
 
-    size_t CheckNeighbors(const Piece& p)const;
+    inline size_t CheckNeighbors(const Piece& p)const;
+    void GetEpochPieces(std::shared_ptr<GameEngine::GameBoard> p) const;
     void ReadFiles();
     void Epoch(std::shared_ptr<GameBoard> pieces);
     void InputPiece();
     void PrintPieces();
     void ClearPieces();
     void RunSim();
-    void GetEpochPieces(std::shared_ptr<GameEngine::GameBoard> p);
-    int m_userInput;
+
     bool m_end = false;
+
     GameBoard m_pieces;
 
 
@@ -61,7 +62,7 @@ private:
         {1, -1}
     }};
 
-    std::unordered_map<MenuInput, std::function<void()>> m_menuOptions{
+    const std::unordered_map<MenuInput, std::function<void()>> m_menuOptions{
         {MenuInput::InputPiece, [&](){InputPiece();}},
         {MenuInput::PrintPieces, [&](){PrintPieces();}},
         {MenuInput::ClearPieces, [&](){ClearPieces();}},

@@ -20,12 +20,9 @@ void GameEngine::Menu() const
 
 void GameEngine::Input()
 {
-    MenuInput input = [&] -> MenuInput
-    {
-        int userInput;
-        std::cin >> userInput;
-        return static_cast<MenuInput>(userInput);
-    }();
+    int userInput;
+    std::cin >> userInput;
+    MenuInput input = static_cast<MenuInput>(userInput);
 
     auto it = m_menuOptions.find(input);
     if (it == m_menuOptions.end())
@@ -76,20 +73,24 @@ void GameEngine::ClearPieces()
 
 void GameEngine::RunSim()
 {
-    auto before = std::chrono::high_resolution_clock::now();
+    // auto before = std::chrono::high_resolution_clock::now();
     for (uint64_t x = 0; x < 10000000; x++)
     {
         m_SpotsToCheck->clear();
         GetEpochPieces(m_SpotsToCheck);
         Epoch(m_SpotsToCheck);
     }
-    auto after = std::chrono::high_resolution_clock::now();
-    std::cout << "Total Time: " << std::chrono::duration_cast<std::chrono::milliseconds>(after-before).count() << std::endl;
-    int x=0;
-    std::cin >> x;
+    // auto after = std::chrono::high_resolution_clock::now();
+    // std::cout << "Total Time: " << std::chrono::duration_cast<std::chrono::milliseconds>(after-before).count() << std::endl;
+    // int x=0;
+    // std::cin >> x;
 };
 
-void GameEngine::GetEpochPieces(std::shared_ptr<GameEngine::GameBoard> p)
+// Get surrounding values
+//  (-1, 1), (0, 1), (1, 1)
+//  (-1, 0), (0, 0), (1, 0)
+//  (-1, -1), (0, -1), (1, -1)
+void GameEngine::GetEpochPieces(std::shared_ptr<GameEngine::GameBoard> p) const
 {
     for (auto &piece : m_pieces)
     {
@@ -114,28 +115,15 @@ size_t GameEngine::CheckNeighbors(const Piece &p) const
     return touching;
 };
 
-// Get surrounding values
-//  (-1, 1), (0, 1), (1, 1)
-//  (-1, 0), (0, 0), (1, 0)
-//  (-1, -1), (0, -1), (1, -1)
 void GameEngine::Epoch(std::shared_ptr<GameBoard> pieces)
 {
-    for (auto p : *pieces)
-    {
+    for (auto p : *pieces){
         const size_t touching = CheckNeighbors(p);
-        if (m_pieces.find(p) != m_pieces.end())
-        { // If piece is alive
-            if (touching != 3 && touching != 2)
-            {
-                m_pieces.erase(p);
-            }
+        if (m_pieces.find(p) != m_pieces.end()){ // If piece is alive
+            if (touching != 3 && touching != 2) m_pieces.erase(p);
         }
-        else
-        {
-            if (touching == 3)
-            {
-                m_pieces.insert(p);
-            }
+        else{
+            if (touching == 3) m_pieces.insert(p);
         }
     }
 };
