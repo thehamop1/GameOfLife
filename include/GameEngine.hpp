@@ -41,10 +41,13 @@ private:
     void PrintPieces();
     void ClearPieces();
     void RunSim();
-    std::shared_ptr<GameBoard> GetEpochPieces();
+    void GetEpochPieces(std::shared_ptr<GameEngine::GameBoard> p);
     int m_userInput;
     bool m_end = false;
     GameBoard m_pieces;
+
+
+    std::shared_ptr<GameEngine::GameBoard> m_SpotsToCheck = std::make_shared<GameEngine::GameBoard>();
 
     constexpr static std::array<std::pair<int64_t, int64_t>, 9> m_nieghbors = {{
         {-1, 1},

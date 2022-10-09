@@ -76,45 +76,41 @@ void GameEngine::ClearPieces()
 
 void GameEngine::RunSim()
 {
+    auto before = std::chrono::high_resolution_clock::now();
     for (uint64_t x = 0; x < 10000000; x++)
     {
-        std::shared_ptr<GameEngine::GameBoard> epochChecks = GetEpochPieces();
-        Epoch(epochChecks);
+        m_SpotsToCheck->clear();
+        GetEpochPieces(m_SpotsToCheck);
+        Epoch(m_SpotsToCheck);
     }
+    auto after = std::chrono::high_resolution_clock::now();
+    std::cout << "Total Time: " << std::chrono::duration_cast<std::chrono::milliseconds>(after-before).count() << std::endl;
+    int x=0;
+    std::cin >> x;
 };
 
-std::shared_ptr<GameEngine::GameBoard> GameEngine::GetEpochPieces()
+void GameEngine::GetEpochPieces(std::shared_ptr<GameEngine::GameBoard> p)
 {
-    auto set = std::make_shared<GameEngine::GameBoard>();
     for (auto &piece : m_pieces)
     {
         for (auto &n : m_nieghbors)
         {
-            set->insert({(piece.first + n.first), (piece.second + n.second)});
+            p->insert({(piece.first + n.first), (piece.second + n.second)});
         }
     }
-    return set;
 };
 
 size_t GameEngine::CheckNeighbors(const Piece &p) const
 {
     size_t touching = 0;
-    if (m_pieces.find({p.first - 1, p.second + 1}) != m_pieces.end())
-        touching++;
-    if (m_pieces.find({p.first, p.second + 1}) != m_pieces.end())
-        touching++;
-    if (m_pieces.find({p.first + 1, p.second + 1}) != m_pieces.end())
-        touching++;
-    if (m_pieces.find({p.first - 1, p.second}) != m_pieces.end())
-        touching++;
-    if (m_pieces.find({p.first + 1, p.second}) != m_pieces.end())
-        touching++;
-    if (m_pieces.find({p.first - 1, p.second - 1}) != m_pieces.end())
-        touching++;
-    if (m_pieces.find({p.first, p.second - 1}) != m_pieces.end())
-        touching++;
-    if (m_pieces.find({p.first + 1, p.second - 1}) != m_pieces.end())
-        touching++;
+    touching += m_pieces.contains({p.first - 1, p.second + 1});
+    touching += m_pieces.contains({p.first, p.second + 1});
+    touching += m_pieces.contains({p.first + 1, p.second + 1});
+    touching += m_pieces.contains({p.first - 1, p.second});
+    touching += m_pieces.contains({p.first + 1, p.second});
+    touching += m_pieces.contains({p.first - 1, p.second - 1});
+    touching += m_pieces.contains({p.first, p.second - 1});
+    touching += m_pieces.contains({p.first + 1, p.second - 1});
     return touching;
 };
 
@@ -124,53 +120,23 @@ size_t GameEngine::CheckNeighbors(const Piece &p) const
 //  (-1, -1), (0, -1), (1, -1)
 void GameEngine::Epoch(std::shared_ptr<GameBoard> pieces)
 {
-    // std::mutex addLock, removeLock;
-    // std::unordered_set<Piece, GameEngine::hashFunction> addSet;
-    // std::unordered_set<Piece, GameEngine::hashFunction> removeSet;
-
-    // check each point neighbor hit
-    // add actions to data structure
-    // after all computations update the board
-    std::vector<std::future<std::pair<std::vector<Piece>, std::vector<Piece>>, GameEngine::hashFunction>>> checks;
-
     for (auto p : *pieces)
     {
-        checks.push_back(std::async(std::launch::async,
-                                    [&, p]()
-                                    {
-                                        std::pair<std::vector<Piece>, std::vector<Piece>>
-                                        size_t touching = CheckNeighbors(p);
-                                        if (m_pieces.find(p) != m_pieces.end())
-                                        { // If piece is alive
-                                            if (touching != 3 && touching != 2)
-                                            {
-                                                std::scoped_lock<std::mutex> lock(removeLock);
-                                                removeSet.insert(p);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            if (touching == 3)
-                                            {
-                                                std::scoped_lock<std::mutex> lock(addLock);
-                                                addSet.insert(p);
-                                            }
-                                        }
-                                    }));
-    }
-
-    for (auto &f : checks){
-        f.wait();
-    }
-
-    for (auto &r : removeSet)
-    {
-        m_pieces.erase(r);
-    }
-
-    for (auto &a : addSet)
-    {
-        m_pieces.insert(a);
+        const size_t touching = CheckNeighbors(p);
+        if (m_pieces.find(p) != m_pieces.end())
+        { // If piece is alive
+            if (touching != 3 && touching != 2)
+            {
+                m_pieces.erase(p);
+            }
+        }
+        else
+        {
+            if (touching == 3)
+            {
+                m_pieces.insert(p);
+            }
+        }
     }
 };
 
