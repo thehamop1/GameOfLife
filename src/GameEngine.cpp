@@ -73,17 +73,12 @@ void GameEngine::ClearPieces()
 
 void GameEngine::RunSim()
 {
-    // auto before = std::chrono::high_resolution_clock::now();
     for (uint64_t x = 0; x < 10000000; x++)
     {
         m_SpotsToCheck->clear();
         GetEpochPieces(m_SpotsToCheck);
         Epoch(m_SpotsToCheck);
     }
-    // auto after = std::chrono::high_resolution_clock::now();
-    // std::cout << "Total Time: " << std::chrono::duration_cast<std::chrono::milliseconds>(after-before).count() << std::endl;
-    // int x=0;
-    // std::cin >> x;
 };
 
 // Get surrounding values
