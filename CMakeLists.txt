@@ -18,11 +18,4 @@ set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-Wall -m64 -g3 -O3 -fopenmp -DNDEBUG -lprofi
 
 include_directories(include)
 add_subdirectory(src)
-
-# add_subdirectory(googletest)
-# option(BP_BUILD_TESTS "Build tests" ON)
-# if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BP_BUILD_TESTS)
-#     include(GoogleTest)
-#     enable_testing()
-#     add_subdirectory(test)
-# endif()
+add_subdirectory(GUI)
