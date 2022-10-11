@@ -2,186 +2,147 @@
 #include <iostream>
 #include <filesystem>
 #include <fstream>
-#include <sstream>
 #include <string>
+#include <chrono>
 
-void GameEngine::Menu() const
-{
-    std::cout << "\t================MAIN MENU================\t" << std::endl;
-    std::cout << "\t0. End Game" << std::endl;
-    std::cout << "\t1. Add pieces" << std::endl;
-    std::cout << "\t2. Print pieces" << std::endl;
-    std::cout << "\t3. Clear pieces" << std::endl;
-    std::cout << "\t4. Run Simulation for 10 Rounds" << std::endl;
-    std::cout << "\t5. Read in configuration file" << std::endl;
-};
-
-void GameEngine::Input()
-{
-    MenuInput input = [&] -> MenuInput
-    {
-        int userInput;
-        std::cin >> userInput;
-        return static_cast<MenuInput>(userInput);
-    }();
-
-    auto it = m_menuOptions.find(input);
-    if (it == m_menuOptions.end())
-    {
-        std::cerr << "BAD MENU OPTION" << std::endl;
-        std::cerr << "Try Again" << std::endl;
-        return;
-    }
-
-    it->second();
-    std::system("clear");
-};
-
+/// @brief Prints the game pieces to a table
 void GameEngine::PrintPieces()
 {
-    std::system("clear");
     std::cout << "\tCurrent Game Pieces" << std::endl;
     std::cout << "\t==========================================" << std::endl;
 
-    for (auto &p : m_pieces)
-        std::cout << "\tx: " << p.first << "\t" << "y: " << p.second << std::endl;
-
-    std::cout << "\npress any button to continue" << std::endl;
-    uint8_t x = 0;
-    std::cin >> x;
+    for (auto &p : m_pieces) std::cout << "\tx: " << p.first << "\t" << "y: " << p.second << std::endl;
 }
 
-void GameEngine::InputPiece()
+/// @brief Insert a piece into the game board. Any duplicates are
+/// currently silently rejected.
+/// @param p An x, y pair with data type int64_t
+void GameEngine::InputPiece(const Piece& p)
 {
-    int64_t x = 0;
-    int64_t y = 0;
-    int state = 0;
-    std::cout << "Input two integers delimted by a space" << std::endl;
-    std::cout << "\tX Value: ";
-    std::cin >> x;
-    std::cout << "\tY Value: ";
-    std::cin >> y;
-    std::cout << "\tAlive (1) or False(0): ";
-    std::cin >> state;
-    m_pieces.insert({x, y});
+    m_pieces.insert(p);
 };
 
+/// @brief This function will remove game pieces from the board. Non-Existant
+/// pieces dont have any effect.
+/// @param p An x, y pair with data type int64_t
+void GameEngine::ClearPiece(const Piece& p)
+{
+    m_pieces.erase(p);
+};
+
+/// @brief This function will clear the game board
 void GameEngine::ClearPieces()
 {
     m_pieces.clear();
 };
 
+/// @brief Print the pieces currently around the origin
+void GameEngine::PrintBoard(){
+    for(int y=11;y>-11;y--){
+        for(int x=-11;x<11;x++){
+            if(m_pieces.contains({x, y})){
+                std::cout << "x" << " ";
+            }else{
+                std::cout << "-" << " ";
+            }
+        }
+        std::cout << std::endl;
+    }
+};
+
+/// @brief This will run the sim for 10 cycles.
 void GameEngine::RunSim()
 {
-    for (int x = 0; x < 10; x++)
+    // for (size_t x = 0; x < 10000000; x++)//This is how i profiled
+    for (size_t x = 0; x < 10; x++)
     {
-        std::shared_ptr<GameEngine::GameBoard> epochChecks = GetEpochPieces();
-        // for(auto l : *epochChecks){
-        //     std::cout << l.first << "\t" << l.second << std::endl;
-        // }
-        // std::cout << "SIZE: " << epochChecks->size();
-        // int y=0;
-        // std::cin >> y;
-        Epoch(epochChecks);
+        GetEpochPieces(m_SpotsToCheck);
+        Epoch(m_SpotsToCheck);
     }
-};
-
-std::shared_ptr<GameEngine::GameBoard> GameEngine::GetEpochPieces(){
-    auto set = std::make_shared<GameEngine::GameBoard>();
-    for (auto &piece : m_pieces)
-    {
-        for(auto& n : m_nieghbors){
-            set->insert({(piece.first + n.first), (piece.second + n.second)});
-        }
-    }
-    return set;
-};
-
-size_t GameEngine::CheckNeighbors(const Piece& p) const{
-    size_t touching = 0;
-    if (m_pieces.find({p.first - 1, p.second + 1}) != m_pieces.end())
-        touching++;
-    if (m_pieces.find({p.first, p.second + 1}) != m_pieces.end())
-        touching++;
-    if (m_pieces.find({p.first + 1, p.second + 1}) != m_pieces.end())
-        touching++;
-    if (m_pieces.find({p.first - 1, p.second}) != m_pieces.end())
-        touching++;
-    if (m_pieces.find({p.first + 1, p.second}) != m_pieces.end())
-        touching++;
-    if (m_pieces.find({p.first - 1, p.second - 1}) != m_pieces.end())
-        touching++;
-    if (m_pieces.find({p.first, p.second - 1}) != m_pieces.end())
-        touching++;
-    if (m_pieces.find({p.first + 1, p.second - 1}) != m_pieces.end())
-        touching++;
-    return touching;
 };
 
 // Get surrounding values
 //  (-1, 1), (0, 1), (1, 1)
-//  (-1, 0), (0, 0), (1, 0)
+//  (-1, 0), (0,0), (1, 0)
 //  (-1, -1), (0, -1), (1, -1)
-void GameEngine::Epoch(std::shared_ptr<GameBoard> pieces)
+/// @brief This function populates a gameboard where the marked cells 
+/// represent cells that have the potential to change state.
+/// @param p A temporary game board object that represents all the cells
+/// to check during a given tick. 
+void GameEngine::GetEpochPieces(GameEngine::GameBoard& p) const
 {
-    std::unordered_set<Piece, GameEngine::hashFunction> addSet;
-    std::unordered_set<Piece, GameEngine::hashFunction> removeSet;
+    p.clear();
+    for (const auto &piece : m_pieces)
+    {
+        for (const auto &n : m_nieghbors)
+        {
+            p.insert({(piece.first + n.first), (piece.second + n.second)});
+        }
+        p.insert(piece);
+    }
+};
 
-    //check each point neighbor hit
-    //add actions to data structure
-    //after all computations update the board
-    for(auto& p : *pieces){
-        size_t touching = CheckNeighbors(p);
-        if(m_pieces.find(p) != m_pieces.end()){//If piece is alive
-            if (touching != 3 && touching != 2){
-                removeSet.insert(p);
-            }
-        }else{
-            if(touching==3){
-                addSet.insert(p);
-            }
+// Get surrounding values
+//  (-1, 1), (0, 1), (1, 1)
+//  (-1, 0), (NOT_ME), (1, 0)
+//  (-1, -1), (0, -1), (1, -1)
+/// @brief This will get the number of alive pieces next to a given cell.
+/// @param p A game object piece represnted by a pair of int64_t
+/// @return The number of alive neighbors
+const size_t GameEngine::CheckNeighbors(const Piece &p) const
+{
+    size_t touching = 0;
+    for (auto const &n : m_nieghbors)
+    {
+        touching += m_pieces.contains({(p.first + n.first), (p.second + n.second)});
+    }
+    return touching;
+};
+
+/// @brief This will run one tick of the game. This function will change the state of the main gameboard.
+/// @param pieces The gameboard where all possible cells that could change state based on the current board
+/// are marked.
+void GameEngine::Epoch(GameEngine::GameBoard& pieces)
+{
+    //We dont want to alter the game board as we go
+    std::unordered_set<Piece, GameEngine::hashFunction> removeList, addList;
+
+    for (const auto &p : pieces)
+    {
+        const size_t touching = CheckNeighbors(p);
+        if (m_pieces.contains(p))
+        { // If piece is alive
+            if (touching != 3 && touching != 2) removeList.insert(p);
+        }
+        else
+        {
+            if (touching == 3) addList.insert(p);
         }
     }
 
-    for(auto& r : removeSet){
-        m_pieces.erase(r);
-    }
+    for(const auto& r : removeList) m_pieces.erase(r);
 
-    for(auto& a : addSet){
-        m_pieces.insert(a);
-    }
-
+    for(const auto& a : addList) m_pieces.insert(a);
 };
 
-void GameEngine::ReadFiles()
+/// @brief This function will print out the gameboard to a Life 1.06 file
+void GameEngine::PrintState()
 {
-    using namespace std::filesystem;
-    std::vector<path> configFiles;
-    int x = 0;
-    std::cout << "Select a file" << std::endl;
-    for (const directory_entry &dir_entry : recursive_directory_iterator("../../configs"))
+    std::ofstream outputFile;
+    auto now = std::chrono::system_clock::now();
+    std::chrono::year_month_day ymd{std::chrono::floor<std::chrono::days>(now)};
+    std::string path = "./GML_OUTPUT_" + std::to_string(int{ymd.year()}) + "_" + std::to_string(unsigned{ymd.month()}) + "_" + std::to_string(unsigned{ymd.day()}) + "_" + std::to_string(now.time_since_epoch().count()) + ".life";
+    outputFile.open(path);
+    if (!outputFile.is_open())
     {
-        std::cout << x++ << ". " << dir_entry.path().filename() << std::endl;
-        configFiles.push_back(dir_entry);
-    }
-    std::cout << std::endl;
-
-    size_t choice = 0;
-    std::cin >> choice;
-    if((choice<0) && (choice>configFiles.size())){
-        std::cerr << "Bad File Choice!" << std::endl;
-        std::cin >> x;
+        std::cerr << "Could not output game state!" << std::endl;
         return;
     }
 
-    std::string line;
-    std::ifstream file;
-    file.open(configFiles[choice]);
-    while (std::getline(file, line))
-    {
-        std::istringstream iss(line);
-        int64_t x, y;
-        if (!(iss >> x >> y)) { break; }
-        m_pieces.insert({x, y});
-    }
+    outputFile << "#Life 1.06\n";
+
+    for (const auto &p : m_pieces)
+        outputFile << p.first << "\t" << p.second << "\n";
+
+    outputFile.close();
 };

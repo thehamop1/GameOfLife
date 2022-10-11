@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Game of Life",
+            "name": "Game of Life: CLI",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/bin/MAIN",
@@ -10,6 +10,28 @@
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/build/bin",
             "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            // "preLaunchTask": "build",
+            "miDebuggerPath": "/usr/bin/gdb"
+        },
+        {
+            "name": "Game of Life: GUI",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/GUI",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/build/bin",
+            "environment": [],
+            "envFile": "${workspaceFolder}/.env",
             "externalConsole": false,
             "MIMode": "gdb",
             "setupCommands": [
