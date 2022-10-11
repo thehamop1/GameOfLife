@@ -6,6 +6,7 @@
 #include <sstream>
 #include <string>
 #include <mutex>
+#include <chrono>
 
 void GameEngine::Menu() const
 {
@@ -16,6 +17,7 @@ void GameEngine::Menu() const
     std::cout << "\t3. Clear pieces" << std::endl;
     std::cout << "\t4. Run Simulation for 10 Rounds" << std::endl;
     std::cout << "\t5. Read in configuration file" << std::endl;
+    std::cout << "\t6. Print the current state to life file" << std::endl;
 };
 
 void GameEngine::Input()
@@ -73,7 +75,7 @@ void GameEngine::ClearPieces()
 
 void GameEngine::RunSim()
 {
-    for (uint64_t x = 0; x < 10000000; x++)
+    for (uint64_t x = 0; x < 10; x++)
     {
         m_SpotsToCheck->clear();
         GetEpochPieces(m_SpotsToCheck);
@@ -87,32 +89,27 @@ void GameEngine::RunSim()
 //  (-1, -1), (0, -1), (1, -1)
 void GameEngine::GetEpochPieces(std::shared_ptr<GameEngine::GameBoard> p) const
 {
-    for (auto &piece : m_pieces)
+    for (const auto &piece : m_pieces)
     {
-        for (auto &n : m_nieghbors)
+        for (const auto &n : m_nieghbors)
         {
             p->insert({(piece.first + n.first), (piece.second + n.second)});
         }
     }
 };
 
-size_t GameEngine::CheckNeighbors(const Piece &p) const
+const size_t GameEngine::CheckNeighbors(const Piece &p) const
 {
     size_t touching = 0;
-    touching += m_pieces.contains({p.first - 1, p.second + 1});
-    touching += m_pieces.contains({p.first, p.second + 1});
-    touching += m_pieces.contains({p.first + 1, p.second + 1});
-    touching += m_pieces.contains({p.first - 1, p.second});
-    touching += m_pieces.contains({p.first + 1, p.second});
-    touching += m_pieces.contains({p.first - 1, p.second - 1});
-    touching += m_pieces.contains({p.first, p.second - 1});
-    touching += m_pieces.contains({p.first + 1, p.second - 1});
+    for(auto const& n : m_nieghbors){
+        touching += m_pieces.contains({p.first + n.first, p.second + n.second});
+    }
     return touching;
 };
 
-void GameEngine::Epoch(std::shared_ptr<GameBoard> pieces)
+void GameEngine::Epoch(std::shared_ptr<GameEngine::GameBoard> pieces)
 {
-    for (auto p : *pieces){
+    for (const auto& p : *pieces){
         const size_t touching = CheckNeighbors(p);
         if (m_pieces.find(p) != m_pieces.end()){ // If piece is alive
             if (touching != 3 && touching != 2) m_pieces.erase(p);
@@ -158,4 +155,23 @@ void GameEngine::ReadFiles()
         }
         m_pieces.insert({x, y});
     }
+};
+
+void GameEngine::PrintState(){
+    std::ofstream outputFile;
+    auto now = std::chrono::system_clock::now();
+    std::chrono::year_month_day ymd{std::chrono::floor<std::chrono::days>(now)};
+    std::string path = "./GML_OUTPUT_" + std::to_string(int{ymd.year()}) + "_" + std::to_string(unsigned{ymd.month()}) + "_" + std::to_string(unsigned{ymd.day()}) + "_" + std::to_string(now.time_since_epoch().count()) + ".life";
+    outputFile.open(path);
+    if(!outputFile.is_open()){
+        std::cerr << "Could not output game state!" << std::endl;
+        return;
+    }
+
+    outputFile << "#Life 1.06\n";
+
+    for(const auto& p : m_pieces)
+        outputFile << p.first << "\t" << p.second << "\n";
+    
+    outputFile.close();
 };

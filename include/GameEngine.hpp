@@ -22,6 +22,7 @@ private:
         ClearPieces = 3,
         RunSim = 4,
         ReadConfig = 5,
+        PrintState = 6,
     };
     // Hash function 
     struct hashFunction
@@ -34,19 +35,19 @@ private:
     using Piece = std::pair<int64_t, int64_t>;
     using GameBoard = std::unordered_set<Piece, hashFunction>;
 
-    inline size_t CheckNeighbors(const Piece& p)const;
+    inline const size_t CheckNeighbors(const Piece& p)const;
     void GetEpochPieces(std::shared_ptr<GameEngine::GameBoard> p) const;
     void ReadFiles();
     void Epoch(std::shared_ptr<GameBoard> pieces);
     void InputPiece();
     void PrintPieces();
     void ClearPieces();
+    void PrintState();
     void RunSim();
 
     bool m_end = false;
 
     GameBoard m_pieces;
-
 
     std::shared_ptr<GameEngine::GameBoard> m_SpotsToCheck = std::make_shared<GameEngine::GameBoard>();
 
@@ -68,6 +69,7 @@ private:
         {MenuInput::ClearPieces, [&](){ClearPieces();}},
         {MenuInput::RunSim, [&](){RunSim();}},
         {MenuInput::End, [&](){m_end = true;}},
-        {MenuInput::ReadConfig, [&](){ReadFiles();}}
+        {MenuInput::ReadConfig, [&](){ReadFiles();}},
+        {MenuInput::PrintState, [&](){PrintState();}}
     };
 };
