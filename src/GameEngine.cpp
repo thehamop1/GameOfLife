@@ -85,7 +85,7 @@ void GameEngine::RunSim()
 
 // Get surrounding values
 //  (-1, 1), (0, 1), (1, 1)
-//  (-1, 0), (0, 0), (1, 0)
+//  (-1, 0), (0,0), (1, 0)
 //  (-1, -1), (0, -1), (1, -1)
 void GameEngine::GetEpochPieces(std::shared_ptr<GameEngine::GameBoard> p) const
 {
@@ -100,6 +100,10 @@ void GameEngine::GetEpochPieces(std::shared_ptr<GameEngine::GameBoard> p) const
     }
 };
 
+// Get surrounding values
+//  (-1, 1), (0, 1), (1, 1)
+//  (-1, 0), (NOT_ME), (1, 0)
+//  (-1, -1), (0, -1), (1, -1)
 const size_t GameEngine::CheckNeighbors(const Piece &p) const
 {
     size_t touching = 0;
@@ -107,7 +111,7 @@ const size_t GameEngine::CheckNeighbors(const Piece &p) const
     {
         touching += m_pieces.contains({(p.first + n.first), (p.second + n.second)});
     }
-    return touching;//the game piece is always technically touching itself
+    return touching;
 };
 
 void GameEngine::Epoch(std::shared_ptr<GameEngine::GameBoard> pieces)
