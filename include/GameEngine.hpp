@@ -27,9 +27,12 @@ private:
     // Hash function 
     struct hashFunction
     {
-        size_t operator()(const std::pair<int64_t, int64_t> &x) const
+        template<typename T>
+        size_t operator()(const std::pair<T, T> &x) const
         {
-            return x.first ^ x.second;
+            std::size_t hash1 = std::hash<T>()(x.first);
+            std::size_t hash2 = std::hash<T>()(x.second);
+            return hash1 ^ hash2;
         }
     };
     using Piece = std::pair<int64_t, int64_t>;

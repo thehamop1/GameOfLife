@@ -11,13 +11,13 @@
 void GameEngine::Menu() const
 {
     std::cout << "\t================MAIN MENU================\t" << std::endl;
-    std::cout << "\t0. End Game" << std::endl;
     std::cout << "\t1. Add pieces" << std::endl;
     std::cout << "\t2. Print pieces" << std::endl;
     std::cout << "\t3. Clear pieces" << std::endl;
     std::cout << "\t4. Run Simulation for 10 Rounds" << std::endl;
     std::cout << "\t5. Read in configuration file" << std::endl;
     std::cout << "\t6. Print the current state to life file" << std::endl;
+    std::cout << "\tAny other button to end game" << std::endl;
 };
 
 void GameEngine::Input()
@@ -29,8 +29,7 @@ void GameEngine::Input()
     auto it = m_menuOptions.find(input);
     if (it == m_menuOptions.end())
     {
-        std::cerr << "BAD MENU OPTION" << std::endl;
-        std::cerr << "Try Again" << std::endl;
+        std::cerr << "Menu Error: Try Again" << std::endl;
         return;
     }
 
@@ -44,11 +43,9 @@ void GameEngine::PrintPieces()
     std::cout << "\tCurrent Game Pieces" << std::endl;
     std::cout << "\t==========================================" << std::endl;
 
-    for (auto &p : m_pieces)
-        std::cout << "\tx: " << p.first << "\t"
-                  << "y: " << p.second << std::endl;
+    for (auto &p : m_pieces) std::cout << "\tx: " << p.first << "\t" << "y: " << p.second << std::endl;
 
-    std::cout << "\npress any button to continue" << std::endl;
+    std::cout << std::endl << "press any button to continue" << std::endl;
     uint8_t x = 0;
     std::cin >> x;
 }
