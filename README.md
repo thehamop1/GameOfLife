@@ -15,9 +15,11 @@ Using Qt version 5.9.7 in /home/cristian/anaconda3/lib
 
 # Build Process
 1. Create a folder called build in the root project directory.
+2. Run the following command: cd build
 2. Run the following command: cmake -DCMAKE_BUILD_TYPE=Release ..
 - NOTE: If you have multiple compilers you may have to specify which to use:
 cmake -DCMAKE_C_COMPILER=<PATH/TO/GCC> -DCMAKE_CXX_COMPILER=<PATH/TO/G++> -DCMAKE_BUILD_TYPE=Release ..
+3. Run the following command in that same folder: make -j
 3. The executables can be found in RIOTGAMESINTERVIEW/build/bin
 
 # Project Layout
