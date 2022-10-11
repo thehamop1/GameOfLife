@@ -120,25 +120,17 @@ void GameEngine::Epoch(std::shared_ptr<GameEngine::GameBoard> pieces)
         const size_t touching = CheckNeighbors(p);
         if (m_pieces.contains(p))
         { // If piece is alive
-            if (touching != 3 && touching != 2)
-            {
-                removeList.insert(p);
-            }
+            if (touching != 3 && touching != 2) removeList.insert(p);
         }
         else
         {
-            if (touching == 3)
-            {
-                addList.insert(p);
-            }
+            if (touching == 3) addList.insert(p);
         }
     }
-    for(const auto& r : removeList){
-        m_pieces.erase(r);
-    }
-    for(const auto& a : addList){
-        m_pieces.insert(a);
-    }
+
+    for(const auto& r : removeList) m_pieces.erase(r);
+
+    for(const auto& a : addList) m_pieces.insert(a);
 };
 
 void GameEngine::ReadFiles()
