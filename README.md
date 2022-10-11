@@ -11,6 +11,7 @@ the rules:
 - The GUI was built with QT version:
 QMake version 3.1
 Using Qt version 5.9.7 in /home/cristian/anaconda3/lib
+- Profiling is done with gperftools, google-pprof, and kcachegrind
 
 # Build Process
 1. Create a folder called build in the root project directory.
