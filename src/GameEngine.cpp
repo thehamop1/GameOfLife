@@ -14,6 +14,7 @@ void GameEngine::Menu() const
     std::cout << "\t4. Run Simulation for 10 Rounds" << std::endl;
     std::cout << "\t5. Read in configuration file" << std::endl;
     std::cout << "\t6. Print the current state to life file" << std::endl;
+    std::cout << "\t7. Print the Game Board" << std::endl;
     std::cout << "\tAny other button to end game" << std::endl;
 };
 
@@ -65,6 +66,21 @@ void GameEngine::InputPiece()
 void GameEngine::ClearPieces()
 {
     m_pieces.clear();
+};
+
+void GameEngine::PrintBoard(){
+    for(int x=-11;x<11;x++){
+        for(int y=-11;y<11;y++){
+            if(m_pieces.contains({x, y})){
+                std::cout << "x" << " ";
+            }else{
+                std::cout << "-" << " ";
+            }
+        }
+        std::cout << std::endl;
+    }
+    int z=0;
+    std::cin >> z;
 };
 
 void GameEngine::RunSim()

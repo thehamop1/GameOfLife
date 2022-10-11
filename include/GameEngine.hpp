@@ -21,6 +21,7 @@ private:
         RunSim = 4,
         ReadConfig = 5,
         PrintState = 6,
+        DisplayState = 7,
     };
     // Hash function 
     struct hashFunction
@@ -43,6 +44,7 @@ private:
     void InputPiece();
     void PrintPieces();
     void ClearPieces();
+    void PrintBoard();
     void PrintState();
     void RunSim();
 
@@ -68,6 +70,7 @@ private:
         {MenuInput::RunSim, [&](){RunSim();}},
         {MenuInput::End, [&](){m_end = true;}},
         {MenuInput::ReadConfig, [&](){ReadFiles();}},
-        {MenuInput::PrintState, [&](){PrintState();}}
+        {MenuInput::PrintState, [&](){PrintState();}},
+        {MenuInput::DisplayState, [&](){PrintBoard();}}
     };
 };
