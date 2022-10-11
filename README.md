@@ -26,3 +26,7 @@ Profiling -> some artifacts from analyzing 10 million game ticks
 GUI -> GUI code
 configs -> You can create game files here and run them in the game
 .vscode -> vscode config files 
+
+# Current State of project
+- All base requirements met with CLI version.
+- TODO: Make GUI implmentation in QT.
