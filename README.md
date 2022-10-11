@@ -24,10 +24,15 @@ cmake -DCMAKE_C_COMPILER=<PATH/TO/GCC> -DCMAKE_CXX_COMPILER=<PATH/TO/G++> -DCMAK
 
 # Project Layout
 src -> Contains the CLI app and the logic for the game board
+
 include -> Header files for the game board
+
 Profiling -> some artifacts from analyzing 10 million game ticks
+
 GUI -> GUI code
+
 configs -> You can create game files here and run them in the game
+
 .vscode -> vscode config files 
 
 # Current State of project
