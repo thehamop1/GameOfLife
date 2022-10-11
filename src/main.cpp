@@ -4,14 +4,13 @@
 #include <fstream>
 
 enum class MenuInput{
-    End = 0,
-    InputPiece = 1,
-    PrintPieces = 2,
-    ClearPieces = 3,
-    RunSim = 4,
-    ReadConfig = 5,
-    PrintState = 6,
-    DisplayState = 7,
+    End=0,
+    PrintPieces=1,
+    ClearPieces=2,
+    RunSim=3,
+    ReadConfig=4,
+    PrintState=5,
+    DisplayState=6,
 };//enum to manage menu
 
 bool IsOver=false;//Is the game over
@@ -26,7 +25,6 @@ int main()
 
   //trying to avoid a long switch statement
   const std::unordered_map<MenuInput, std::function<void()>> MenuOptions{
-      {MenuInput::InputPiece, [&](){InputPiece(game);}},
       {MenuInput::PrintPieces, [&](){game.PrintPieces();}},
       {MenuInput::ClearPieces, [&](){game.ClearPieces();}},
       {MenuInput::RunSim, [&](){game.RunSim();}},
@@ -57,36 +55,24 @@ int main()
 void Menu()
 {
     std::cout << "\t================MAIN MENU================\t" << std::endl;
-    std::cout << "\t1. Add pieces" << std::endl;
-    std::cout << "\t2. Print pieces" << std::endl;
-    std::cout << "\t3. Clear pieces" << std::endl;
-    std::cout << "\t4. Run Simulation for 10 Rounds" << std::endl;
-    std::cout << "\t5. Read in configuration file" << std::endl;
-    std::cout << "\t6. Print the current state to life file" << std::endl;
-    std::cout << "\t7. Print the Game Board" << std::endl;
+    std::cout << "\t1. Print pieces" << std::endl;
+    std::cout << "\t2. Clear pieces" << std::endl;
+    std::cout << "\t3. Run Simulation for 10 Rounds" << std::endl;
+    std::cout << "\t4. Read in configuration file" << std::endl;
+    std::cout << "\t5. Print the current state to life file" << std::endl;
+    std::cout << "\t6. Print the Game Board" << std::endl;
     std::cout << "\tAny other button to end game" << std::endl;
 };
-
-void InputPiece(GameEngine& e){
-    int64_t x = 0;
-    int64_t y = 0;
-    std::cout << "Input two integers delimted by a space" << std::endl;
-    std::cout << "\tX Value: ";
-    std::cin >> x;
-    std::cout << "\tY Value: ";
-    std::cin >> y;
-    e.InputPiece({x, y});
-}
 
 void ReadFiles(GameEngine& e)
 {
     using namespace std::filesystem;
     std::vector<path> configFiles;
     int x = 0;
-    std::cout << "Select a file" << std::endl;
+    std::cout << "\tSelect a file" << std::endl;
     for (const directory_entry &dir_entry : recursive_directory_iterator("../../configs"))
     {
-        std::cout << x++ << ". " << dir_entry.path().filename() << std::endl;
+        std::cout << "\t" << x++ << ". " << dir_entry.path().filename() << std::endl;
         configFiles.push_back(dir_entry);
     }
     std::cout << std::endl;
