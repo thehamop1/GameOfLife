@@ -51,12 +51,11 @@ private:
 
     std::shared_ptr<GameEngine::GameBoard> m_SpotsToCheck = std::make_shared<GameEngine::GameBoard>();
 
-    constexpr static std::array<std::pair<int64_t, int64_t>, 9> m_nieghbors = {{
+    constexpr static std::array<std::pair<int64_t, int64_t>, 8> m_nieghbors = {{
         {-1, 1},
         {0, 1},
         {1, 1},
         {-1, 0},
-        {0, 0},
         {1, 0},
         {-1, -1},
         {0, -1},
