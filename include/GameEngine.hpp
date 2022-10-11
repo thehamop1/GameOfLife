@@ -1,11 +1,9 @@
 #include <unordered_set>
 #include <unordered_map>
+#include <functional>
 #include <cstdint>
 #include <utility>
-#include <functional>
 #include <cstddef>
-#include <memory>
-#include <iostream>
 
 class GameEngine
 {
@@ -39,9 +37,9 @@ private:
     using GameBoard = std::unordered_set<Piece, hashFunction>;
 
     inline const size_t CheckNeighbors(const Piece& p)const;
-    void GetEpochPieces(std::shared_ptr<GameEngine::GameBoard> p) const;
+    void GetEpochPieces(GameBoard& p) const;
     void ReadFiles();
-    void Epoch(std::shared_ptr<GameBoard> pieces);
+    void Epoch(GameBoard& pieces);
     void InputPiece();
     void PrintPieces();
     void ClearPieces();
@@ -49,10 +47,8 @@ private:
     void RunSim();
 
     bool m_end = false;
-
     GameBoard m_pieces;
-
-    std::shared_ptr<GameEngine::GameBoard> m_SpotsToCheck = std::make_shared<GameEngine::GameBoard>();
+    GameBoard m_SpotsToCheck;
 
     constexpr static std::array<std::pair<int64_t, int64_t>, 8> m_nieghbors = {{
         {-1, 1},

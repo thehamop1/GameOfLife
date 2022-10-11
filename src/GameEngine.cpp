@@ -1,11 +1,8 @@
 #include "GameEngine.hpp"
 #include <iostream>
-#include <future>
 #include <filesystem>
 #include <fstream>
-#include <sstream>
 #include <string>
-#include <mutex>
 #include <chrono>
 
 void GameEngine::Menu() const
@@ -72,10 +69,10 @@ void GameEngine::ClearPieces()
 
 void GameEngine::RunSim()
 {
-    for (size_t x = 0; x < 10; x++)
+    for (size_t x = 0; x < 10000000; x++)//This is how i profiled
+    // for (size_t x = 0; x < 10; x++)
     {
         GetEpochPieces(m_SpotsToCheck);
-        std::cout << m_SpotsToCheck->size() << std::endl;
         Epoch(m_SpotsToCheck);
     }
 };
@@ -84,16 +81,16 @@ void GameEngine::RunSim()
 //  (-1, 1), (0, 1), (1, 1)
 //  (-1, 0), (0,0), (1, 0)
 //  (-1, -1), (0, -1), (1, -1)
-void GameEngine::GetEpochPieces(std::shared_ptr<GameEngine::GameBoard> p) const
+void GameEngine::GetEpochPieces(GameEngine::GameBoard& p) const
 {
-    p->clear();
+    p.clear();
     for (const auto &piece : m_pieces)
     {
         for (const auto &n : m_nieghbors)
         {
-            p->insert({(piece.first + n.first), (piece.second + n.second)});
+            p.insert({(piece.first + n.first), (piece.second + n.second)});
         }
-        p->insert(piece);
+        p.insert(piece);
     }
 };
 
@@ -111,12 +108,12 @@ const size_t GameEngine::CheckNeighbors(const Piece &p) const
     return touching;
 };
 
-void GameEngine::Epoch(std::shared_ptr<GameEngine::GameBoard> pieces)
+void GameEngine::Epoch(GameEngine::GameBoard& pieces)
 {
     //We dont want to alter the game board as we go
     std::unordered_set<Piece, GameEngine::hashFunction> removeList, addList;
 
-    for (const auto &p : *pieces)
+    for (const auto &p : pieces)
     {
         const size_t touching = CheckNeighbors(p);
         if (m_pieces.contains(p))

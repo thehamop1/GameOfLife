@@ -1,0 +1,253 @@
+events: Hits
+
+fl=??
+fn=(1) GameEngine::RunSim
+cfl=??
+cfn=(2) cfree
+calls=23 0
+0 23
+
+fl=??
+fn=(3) __nss_database_lookup
+0 12
+
+fl=??
+fn=(1)
+cfl=(1) GameEngine.cpp
+cfn=(4) std::_Hashtable::_M_insert [clone .isra.0]
+calls=64 0
+0 64
+
+fl=??
+fn=(1)
+cfl=??
+cfn=(5) operator delete
+calls=6 0
+0 6
+
+fl=??
+fn=(2)
+0 34
+
+fl=??
+fn=(6) operator
+0 10
+
+fl=??
+fn=(7) GameEngine::Epoch
+0 1303
+
+fl=??
+fn=(8) _init
+0 20
+
+fl=??
+fn=(7)
+cfl=??
+cfn=(3)
+calls=5 0
+0 5
+
+fl=??
+fn=(9) std::_Hashtable::_M_insert_unique_node
+0 63
+
+fl=??
+fn=(10) std::_Hashtable::_M_rehash
+cfl=??
+cfn=(11) operator new
+calls=7 0
+0 7
+
+fl=??
+fn=(6)
+0 23
+
+fl=??
+fn=(12) std::__detail::_Prime_rehash_policy::_M_need_rehash
+cfl=??
+cfn=(13) std::__detail::_Prime_rehash_policy::_M_next_bkt
+calls=22 0
+0 22
+
+fl=??
+fn=(9)
+cfl=??
+cfn=(8)
+calls=4 0
+0 4
+
+fl=??
+fn=(14) GameEngine::Input
+cfl=??
+cfn=(1)
+calls=2214 0
+0 2214
+
+fl=??
+fn=(1)
+cfl=??
+cfn=(8)
+calls=3 0
+0 3
+
+fl=??
+fn=(15) __libc_start_main
+cfl=??
+cfn=(16) main
+calls=2214 0
+0 2214
+
+fl=??
+fn=(1)
+cfl=??
+cfn=(11)
+calls=83 0
+0 83
+
+fl=??
+fn=(6)
+0 114
+
+fl=??
+fn=(1)
+cfl=??
+cfn=(7)
+calls=1490 0
+0 1490
+
+fl=??
+fn=(17) pthread_attr_setschedparam
+0 200
+
+fl=??
+fn=(7)
+cfl=??
+cfn=(2)
+calls=11 0
+0 11
+
+fl=??
+fn=(9)
+cfl=??
+cfn=(10)
+calls=13 0
+0 13
+
+fl=??
+fn=(12)
+cfl=??
+cfn=(8)
+calls=1 0
+0 1
+
+fl=??
+fn=(9)
+cfl=??
+cfn=(12)
+calls=39 0
+0 39
+
+fl=??
+fn=(7)
+cfl=(1)
+cfn=(4)
+calls=141 0
+0 141
+
+fl=??
+fn=(7)
+cfl=??
+cfn=(17)
+calls=29 0
+0 29
+
+fl=??
+fn=(13)
+0 22
+
+fl=??
+fn=(12)
+0 16
+
+fl=??
+fn=(1)
+cfl=??
+cfn=(3)
+calls=6 0
+0 6
+
+fl=??
+fn=(7)
+cfl=??
+cfn=(8)
+calls=1 0
+0 1
+
+fl=??
+fn=(6)
+0 6
+
+fl=??
+fn=(1)
+cfl=??
+cfn=(17)
+calls=115 0
+0 115
+
+fl=??
+fn=(18) __libc_malloc
+cfl=??
+cfn=(17)
+calls=56 0
+0 56
+
+fl=??
+fn=(1)
+cfl=??
+cfn=(9)
+calls=40 0
+0 40
+
+fl=??
+fn=(10)
+cfl=??
+cfn=(3)
+calls=1 0
+0 1
+
+fl=??
+fn=(16)
+cfl=??
+cfn=(14)
+calls=2214 0
+0 2214
+
+fl=??
+fn=(10)
+0 5
+
+fl=??
+fn=(1)
+0 384
+
+fl=??
+fn=(18)
+0 58
+
+fl=(1)
+fn=(19) std::_Hashtable::_M_insert
+0 68
+
+fl=(1)
+fn=(19)
+0 79
+
+fl=(1)
+fn=(19)
+0 57
+
+fl=(1)
+fn=(19)
+0 1
+

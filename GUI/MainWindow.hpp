@@ -20,7 +20,7 @@ public:
     QHBoxLayout *Grid;
     QHBoxLayout *ButtonLayout;
 
-    QTableWidget *table = new QTableWidget;
+    QTableWidget *table = new QTableWidget(this);
     QPushButton *button = new QPushButton("Run Sim", this);
 
     GameEngine engine;
