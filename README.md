@@ -18,3 +18,11 @@ Using Qt version 5.9.7 in /home/cristian/anaconda3/lib
 - NOTE: If you have multiple compilers you may have to specify which to use:
 cmake -DCMAKE_C_COMPILER=<PATH/TO/GCC> -DCMAKE_CXX_COMPILER=<PATH/TO/G++> -DCMAKE_BUILD_TYPE=Release ..
 3. The executables can be found in RIOTGAMESINTERVIEW/build/bin
+
+# Project Layout
+src -> Contains the CLI app and the logic for the game board
+include -> Header files for the game board
+Profiling -> some artifacts from analyzing 10 million game ticks
+GUI -> GUI code
+configs -> You can create game files here and run them in the game
+.vscode -> vscode config files 
