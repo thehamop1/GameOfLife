@@ -30,8 +30,8 @@ void GameEngine::ClearPieces()
 };
 
 void GameEngine::PrintBoard(){
-    for(int x=-11;x<11;x++){
-        for(int y=-11;y<11;y++){
+    for(int y=11;y>-11;y--){
+        for(int x=-11;x<11;x++){
             if(m_pieces.contains({x, y})){
                 std::cout << "x" << " ";
             }else{
