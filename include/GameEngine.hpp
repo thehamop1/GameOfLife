@@ -7,22 +7,7 @@
 
 class GameEngine
 {
-public:
-    void Menu() const;
-    void Input();
-    inline bool IsOver()const{ return m_end; };
-
 private:
-    enum class MenuInput{
-        End = 0,
-        InputPiece = 1,
-        PrintPieces = 2,
-        ClearPieces = 3,
-        RunSim = 4,
-        ReadConfig = 5,
-        PrintState = 6,
-        DisplayState = 7,
-    };
     // Hash function 
     struct hashFunction
     {
@@ -39,16 +24,8 @@ private:
 
     inline const size_t CheckNeighbors(const Piece& p)const;
     void GetEpochPieces(GameBoard& p) const;
-    void ReadFiles();
     void Epoch(GameBoard& pieces);
-    void InputPiece();
-    void PrintPieces();
-    void ClearPieces();
-    void PrintBoard();
-    void PrintState();
-    void RunSim();
 
-    bool m_end = false;
     GameBoard m_pieces;
     GameBoard m_SpotsToCheck;
 
@@ -62,15 +39,12 @@ private:
         {0, -1},
         {1, -1}
     }};
-
-    const std::unordered_map<MenuInput, std::function<void()>> m_menuOptions{
-        {MenuInput::InputPiece, [&](){InputPiece();}},
-        {MenuInput::PrintPieces, [&](){PrintPieces();}},
-        {MenuInput::ClearPieces, [&](){ClearPieces();}},
-        {MenuInput::RunSim, [&](){RunSim();}},
-        {MenuInput::End, [&](){m_end = true;}},
-        {MenuInput::ReadConfig, [&](){ReadFiles();}},
-        {MenuInput::PrintState, [&](){PrintState();}},
-        {MenuInput::DisplayState, [&](){PrintBoard();}}
-    };
+public:
+    void PrintBoard();
+    void PrintState();
+    void PrintPieces();
+    void ClearPieces();
+    void ClearPiece(const Piece& p);
+    void InputPiece(const Piece& p);
+    void RunSim();
 };

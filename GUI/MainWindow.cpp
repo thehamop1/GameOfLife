@@ -16,7 +16,6 @@ MainWindow::MainWindow(QWidget *parent)
     window->show();
 
     connect(button, &QPushButton::released, this, &MainWindow::HandleButton);
-    engine.Input();
 }
 
 MainWindow::~MainWindow() = default;
